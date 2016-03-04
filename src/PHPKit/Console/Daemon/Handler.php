@@ -61,7 +61,7 @@ class Handler
 
     public static function loadWorkers()
     {
-        $workers = Loader::config();
+        $workers = Loader::getInstance()->config();
 
         defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'load config success');
         foreach($workers as $worker){

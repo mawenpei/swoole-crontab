@@ -47,7 +47,7 @@ trait HandlerTrait
     public static $worker_list = [];
 
     private static $help = <<<EOF
-    Usage:/path/to/php console.php [options] -- [args...]
+    Usage:/path/to/php console.config.php [options] -- [args...]
 
     -h [--help] show help
     -p [--pid] pid file dir

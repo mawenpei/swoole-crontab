@@ -16,6 +16,7 @@ class Console
     const RUN_MODE_DAEMON  = 'daemon';
     public static function run($runMode,$process_name=null)
     {
+        !defined('PHPKIT_CONSOLE_CONFIG_PATH') && exit('console config file is required');
         switch($runMode){
             case self::RUN_MODE_CRONTAB:
                 define('CURRENT_RUN_MODE',self::RUN_MODE_CRONTAB);

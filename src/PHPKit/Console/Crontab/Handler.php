@@ -82,7 +82,7 @@ class Handler
     public static function loadConfig()
     {
         $time = time();
-        $config = Loader::config();
+        $config = Loader::getInstance()->config();
         foreach($config as $id=>$task){
             $ret = ParseCrontab::parse($task["rule"], $time);
             //defined('PHPKIT_RUN_DEBUG') && syslog(LOG_DEBUG,var_export($ret,true));
