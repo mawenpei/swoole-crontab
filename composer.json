@@ -12,7 +12,8 @@
 	"authors":[{"name":"mawenpei","email":"249350293@qq.com"}],
 	"require":{
 	    "php":">=5.4.1",
-		"ext-swoole":">=1.7.17"
+		"ext-swoole":">=1.7.17",
+	    "gabordemooij/redbean":"4.3.1"
 	}
 	
 }

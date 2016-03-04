@@ -14,5 +14,7 @@ class PushMessageWorker extends BaseWorker implements IWorker
     {
         syslog(LOG_INFO,$job);
         syslog(LOG_INFO, 'push message success' . date('Y-m-d H:i:s'));
+        $count = rand(0,100);
+        return $count % 2 == 0 ? true : false;
     }
 }

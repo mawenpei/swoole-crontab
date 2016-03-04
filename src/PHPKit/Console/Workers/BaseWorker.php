@@ -21,38 +21,44 @@ abstract class BaseWorker
 
     public function __construct($options)
     {
-        syslog(LOG_INFO,'worker init success');
+        defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'worker init success');
         if(isset($options['queue'])){
-            syslog(LOG_INFO,'worker options success');
+            defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'worker options success');
             $this->options = $options['queue'];
             $this->queue = new Pheanstalk($this->options['host'],$this->options['port']);
-            syslog(LOG_INFO,'queue init success' . json_encode($this->options));
+            defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'queue init success' . json_encode($this->options));
         }
     }
 
     public function tick(\swoole_process $worker)
     {
         $this->worker = $worker;
-        syslog(LOG_INFO,'tick success');
+        defined('PHPKIT_RUN_DEBUG') &&  syslog(LOG_INFO,'tick success');
         \swoole_timer_tick(500,function(){
             while(true){
                 $this->checkExit();
                 $job = $this->getWaitDoingJob();
                 if(!$job){
-                    syslog(LOG_INFO,'job is empty');
+                    defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'job is empty');
                     break;
                 }
-                $this->run($job->getData());
-                $this->queue->delete($job);
+                $success = $this->run($job->getData());
+                if($success){
+                    $this->queue->delete($job);
+                }else{
+                    //
+                    $this->queue->release($job,1024,300);
+                }
+
             }
         });
     }
 
     public function getWaitDoingJob()
     {
-        syslog(LOG_INFO,'queue pop start success');
+        defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'queue pop start success');
         $job = $this->queue->watch($this->options['tube'])->ignore('default')->reserve(5);
-        syslog(LOG_INFO,'queue pop finish  success');
+        defined('PHPKIT_RUN_DEBUG') && syslog(LOG_INFO,'queue pop finish  success');
         if($job){
             return $job;
         }
